@@ -44,6 +44,7 @@ plot(X306$AQI,res,xlab="AQL",ylab="residual")
 abline(h=2*sigma); abline(h=-2*sigma); abline(h=0)
 title("residual VS.AQL ",cex.main=0.8)
 #There are lots of points outside the 2*residual range, so we need to do some transformation
+
 #plot residuals VS. each explanatory variable
 plot(X306$CO_24h, res)
 plot(X306$NO2_24h, res)
