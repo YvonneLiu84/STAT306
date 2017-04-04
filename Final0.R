@@ -1,0 +1,87 @@
+setwd("/Users/Joy/Desktop/STAT306_lab9/proj")
+
+library(readxl)
+library(leaps)
+
+X306 <- read_excel("~/Desktop/STAT306_lab9/proj/306.xlsx")
+
+## Requirment 1 (Summary of each variable and their corr)
+summary(X306$AQI)
+summary(X306$CO_24h)
+summary(X306$NO2_24h)
+summary(X306$O3_24h)
+summary(X306$PM10_24h)
+summary(X306$PM2.5_24h)
+summary(X306$SO2_24h)
+#correlation matrix
+d<-data.frame(X306$AQI, X306$CO_24h, X306$NO2_24h, X306$O3_24h, X306$PM10_24h, X306$PM2.5_24h, X306$SO2_24h)
+cor(d)
+## END Reuirement 1 (Summary of each variable and their corr)
+
+## Requirment 2 (Create a model)
+X306 <- X306[-478,] #delete the row with AQI = 0
+fit6 <- lm(1000*log(X306$AQI)~X306$CO_24h+X306$NO2_24h+X306$O3_24h+X306$SO2_24h+X306$PM10_24h+X306$PM2.5_24h)
+
+## END Requirment 2 (Create a model)
+
+## Requirment 3 (Print out the residual)
+#plot residuals vs fitted response variable
+plot(fit6$fitted.values, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "Fitted AQI")
+
+plot(X306$CO_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "CO_24h")
+plot(X306$NO2_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "NO2_24h")
+plot(X306$O3_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "O3_24h")
+plot(X306$PM10_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM10_24h") 
+plot(X306$PM2.5_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM2.5_24h")
+plot(X306$SO2_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "SO2_24h")
+## END Requirment 3 (Print out the residual)
+
+
+# Requirement 4 (Use variable selection)
+out.exh6<-regsubsets(log(X306$AQI)~X306$CO_24h+X306$NO2_24h+X306$O3_24h+X306$SO2_24h+X306$PM10_24h+X306$PM2.5_24h, data = X306, nbest=1, nvmax=6)
+summ.exh6<-summary(out.exh6)
+cat("Cp and adjr\n")
+print(summ.exh6$cp)
+print(summ.exh6$adjr) #max adjr = 0.4468629
+# Based on Cp and adjR^2, we decide to use the 4 explainatory variable model. Kicked out SO and CO
+# END Requirement 4 (Use variable selection)
+
+
+# Requirement 5 ( Set training and hold-out set.)
+## Make Train and hold out set
+n <- nrow(X306)
+set.seed(1)
+# here select 1/5 of the data randomly to be the hold out set. 
+holdoutIndex <- sort(sample(1:n, round(n/5), replace = FALSE))
+
+# Initially subset1 is the training set and subset2 is the hold-out set 
+holdoutSet <- X306[holdoutIndex,]
+trainingSet <- X306[-holdoutIndex,] 
+
+#based on the exhaustive selection; compare Cp and adjR^2, 4 variables is the best model
+model.trainSet <- lm(log(AQI)~ NO2_24h + O3_24h + PM10_24h + PM2.5_24h, data = trainingSet)
+#model.trainSet <- lm(askprice~., data = dat.subset1)
+
+# Make predictions at the hold-out data set.
+pred.holdout <- predict(model.trainSet, holdoutSet)
+holdout.err1 <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout))^2)/length(pred.holdout))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout)))
+#from the residual plot of the holdoutSet actual data vs predicted values based on training set
+#is approx. random
+
+#predicted valus and actual values on the same plot
+plot(holdoutIndex, holdoutSet$AQI, type = "l")
+lines(holdoutIndex, exp(pred.holdout), type = "l", col = 'red')
+# END Requirement 5 ( Set training and hold-out set.)
+
+## Requirment 6 (ls.diag(fit) Cook&dfit)
+#cooks distance / dfits
+diagnostics <- ls.diag(fit6)
+cookDis <- diagnostics$cooks
+dfits <- diagnostics$dfits
+
+#plot cooks distance and dfits
+index <- seq(1:nrow(X306))
+plot(index, cookDis, main = "Cooks Distance Plot", xlab = "Index", ylab = "Cooks Distance")
+plot(index, dfits, main = "dfits Plot", xlab = "Index", ylab = "dfits")
+## END Requirment 6 (ls.diag(fit) Cook&dfit)
