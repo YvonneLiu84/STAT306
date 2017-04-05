@@ -65,7 +65,7 @@ holdoutIndex <- sort(sample(1:n, round(n/5), replace = FALSE))
 holdoutSet <- X306[holdoutIndex,]
 trainingSet <- X306[-holdoutIndex,] 
 
-#based on the exhaustive selection; compare Cp and adjR^2 with 6, 3, 4, 5 variables
+#based on the exhaustive selection in requirement 4, fit the model with training set and predict the hold-out set and then compare the predictions with actual values
 model.trainSet_6var <- lm(log(AQI)~sqrt(CO_24h)+NO2_24h+I(O3_24h^0.3)+log(SO2_24h)+log(PM10_24h)+log(PM2.5_24h), data = trainingSet)
 model.trainSet_3var <- lm(log(AQI)~NO2_24h+log(PM10_24h)+log(PM2.5_24h), data = trainingSet)
 model.trainSet_4var <- lm(log(AQI)~NO2_24h+log(SO2_24h)+log(PM10_24h)+log(PM2.5_24h), data = trainingSet)
