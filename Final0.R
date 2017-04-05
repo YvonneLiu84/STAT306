@@ -38,6 +38,9 @@ plot(newO3, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "
 plot(log(X306$PM10_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM10_24h") 
 plot(log(X306$PM2.5_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM2.5_24h")
 plot(log(X306$SO2_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "SO2_24h")
+# Perform DW test
+dwtest(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
+#Conclude that the assumption of residuals are independent is valid here based on DW 
 ## END Requirment 3 (Print out the residual)
 
 
@@ -48,9 +51,6 @@ cat("Cp and adjr\n")
 print(summ.exh6$cp)
 print(summ.exh6$adjr)
 # Based on Cp and adjR^2, we decide to compare 3, 4, 5, 6 variables since their Cp and adjR^2 are really close
-# Perform DW test
-dwtest(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
-#Conclude that the assumption of residuals are independent is valid here based on DW 
 # END Requirement 4 (Use variable selection)
 
 
