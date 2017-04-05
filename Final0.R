@@ -35,8 +35,8 @@ summary(fit)
 plot(log(X306$AQI)~sqrt(X306$CO_24h))
 plot(log(X306$AQI)~newO3)
 plot(log(X306$AQI)~log(X306$PM2.5_24h))
-plot(log(X306$AQI)~log(X306$SO2_24h)
-plot(log(X306$AQI)~log(X306$PM10_24h)
+plot(log(X306$AQI)~log(X306$SO2_24h))
+plot(log(X306$AQI)~log(X306$PM10_24h))
 #conclude that after transformation, the linear assumption is valid here
 ## END Requirment 2 (Create a model)
 
