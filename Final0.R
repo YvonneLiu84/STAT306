@@ -20,25 +20,29 @@ cor(d)
 
 ## Requirment 2 (Create a model)
 X306 <- X306[-478,] #delete the row with AQI = 0
-fit6 <- lm(1000*log(X306$AQI)~X306$CO_24h+X306$NO2_24h+X306$O3_24h+X306$SO2_24h+X306$PM10_24h+X306$PM2.5_24h)
+newO3 <- X306$O3_24h^0.3
+fit6 <- lm(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
+summary(fit)
 
 ## END Requirment 2 (Create a model)
 
 ## Requirment 3 (Print out the residual)
 #plot residuals vs fitted response variable
+sigma <- sumFit$sigma
 plot(fit6$fitted.values, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "Fitted AQI")
+abline(h=2*sigma); abline(h=-2*sigma); abline(h=0)
 
-plot(X306$CO_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "CO_24h")
+plot(sqrt(X306$CO_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "CO_24h")
 plot(X306$NO2_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "NO2_24h")
-plot(X306$O3_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "O3_24h")
-plot(X306$PM10_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM10_24h") 
-plot(X306$PM2.5_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM2.5_24h")
-plot(X306$SO2_24h, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "SO2_24h")
+plot(newO3, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "O3_24h")
+plot(log(X306$PM10_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM10_24h") 
+plot(log(X306$PM2.5_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "PM2.5_24h")
+plot(log(X306$SO2_24h), fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "SO2_24h")
 ## END Requirment 3 (Print out the residual)
 
 
 # Requirement 4 (Use variable selection)
-out.exh6<-regsubsets(log(X306$AQI)~X306$CO_24h+X306$NO2_24h+X306$O3_24h+X306$SO2_24h+X306$PM10_24h+X306$PM2.5_24h, data = X306, nbest=1, nvmax=6)
+out.exh6<-regsubsets(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306, nbest=1, nvmax=6)
 summ.exh6<-summary(out.exh6)
 cat("Cp and adjr\n")
 print(summ.exh6$cp)
