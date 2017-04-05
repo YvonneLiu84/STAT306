@@ -69,7 +69,7 @@ trainingSet <- X306[-holdoutIndex,]
 model.trainSet_6var <- lm(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
 model.trainSet_3var <- lm(log(X306$AQI)~X306$NO2_24h+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
 model.trainSet_4var <- lm(log(X306$AQI)~X306$NO2_24h+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
-model.trainSet_5var <- lm((log(X306$AQI)~X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)                      
+model.trainSet_5var <- lm(log(X306$AQI)~X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)                      
 
 
 # Make predictions at the each hold-out data set.
