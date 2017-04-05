@@ -93,7 +93,7 @@ plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_5var)))
 #Compare the prediction errors and choose the best model: 3 variables with NO2_24h+log(PM10_24h)+log(PM2.5_24h)                      
 
 #predicted valus and actual values based on the best model chosed from requirement 4
-plot(holdoutIndex, holdoutSet$AQI, type = "l")
+plot(holdoutIndex, holdoutSet$AQI, type = "l", main="predicted value VS. actual values")
 lines(holdoutIndex, exp(pred.holdout_3var), type = "l", col = 'red')
 # END Requirement 5 ( Set training and hold-out set.)
 
