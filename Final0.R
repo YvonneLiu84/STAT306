@@ -43,7 +43,7 @@ plot(log(X306$AQI)~log(X306$PM10_24h))
 
 ## Requirment 3 (Print out the residual)
 #plot residuals vs fitted response variable
-sigma <- sumFit$sigma
+sigma <- summary(fit6)$sigma
 plot(fit6$fitted.values, fit6$residuals, main = "Residual Plot", ylab = "residuals", xlab = "Fitted AQI")
 abline(h=2*sigma); abline(h=-2*sigma); abline(h=0)
 
