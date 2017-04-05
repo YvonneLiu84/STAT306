@@ -46,9 +46,9 @@ out.exh6<-regsubsets(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306
 summ.exh6<-summary(out.exh6)
 cat("Cp and adjr\n")
 print(summ.exh6$cp)
-print(summ.exh6$adjr) #max adjr = 0.4468629
-# Based on Cp and adjR^2, we decide to use the 4 explainatory variable model. Kicked out SO and CO
-#Perform DW test
+print(summ.exh6$adjr)
+# Based on Cp and adjR^2, we decide to compare 3, 4, 5, 6 variables since their Cp and adjR^2 are really close
+# Perform DW test
 dwtest(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
 #Conclude that the assumption of residuals are independent is valid here based on DW 
 # END Requirement 4 (Use variable selection)
@@ -90,8 +90,9 @@ holdout.err_5var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_5var))^2)/length
 plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_5var)))
 #from the residual plot of the holdoutSet actual data vs predicted values based on training set
 #is approx. random
+#Compare the prediction errors and choose the best model                          
 
-#predicted valus and actual values on the same plot
+#predicted valus and actual values based on the best model chosed from requirement 4
 plot(holdoutIndex, holdoutSet$AQI, type = "l")
 lines(holdoutIndex, exp(pred.holdout), type = "l", col = 'red')
 # END Requirement 5 ( Set training and hold-out set.)
