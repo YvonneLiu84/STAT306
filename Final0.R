@@ -16,6 +16,13 @@ summary(X306$SO2_24h)
 #correlation matrix
 d<-data.frame(X306$AQI, X306$CO_24h, X306$NO2_24h, X306$O3_24h, X306$PM10_24h, X306$PM2.5_24h, X306$SO2_24h)
 cor(d)
+#plot response variable VS. explainatory variables
+plot(X306$AQI~X306$CO_24h)
+plot(X306$AQI~X306$NO2_24h)
+plot(X306$AQI~X306$O3_24h)
+plot(X306$AQI~X306$PM10_24h)
+plot(X306$AQI~X306$PM2.5_24h)
+plot(X306$AQI~X306$SO2_24h)
 ## END Reuirement 1 (Summary of each variable and their corr)
 
 ## Requirment 2 (Create a model)
@@ -24,6 +31,13 @@ newO3 <- X306$O3_24h^0.3
 fit6 <- lm(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
 summary(fit)
 
+#plot transformed response variable VS. transformed explainatory variables
+plot(log(X306$AQI)~sqrt(X306$CO_24h))
+plot(log(X306$AQI)~newO3)
+plot(log(X306$AQI)~log(X306$PM2.5_24h))
+plot(log(X306$AQI)~log(X306$SO2_24h)
+plot(log(X306$AQI)~log(X306$PM10_24h)
+#conclude that after transformation, the linear assumption is valid here
 ## END Requirment 2 (Create a model)
 
 ## Requirment 3 (Print out the residual)
