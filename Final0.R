@@ -85,9 +85,9 @@ pred.holdout_4var <- predict(model.trainSet_4var, holdoutSet)
 holdout.err_4var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_4var))^2)/length(pred.holdout_4var))
 plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_4var)))
                           
-pred.holdout_4var <- predict(model.trainSet_4var, holdoutSet)
-holdout.err_4var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_4var))^2)/length(pred.holdout_4var))
-plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_4var)))
+pred.holdout_5var <- predict(model.trainSet_5var, holdoutSet)
+holdout.err_5var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_5var))^2)/length(pred.holdout_5var))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_5var)))
 #from the residual plot of the holdoutSet actual data vs predicted values based on training set
 #is approx. random
 
