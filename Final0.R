@@ -90,16 +90,17 @@ holdout.err_5var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_5var))^2)/length
 plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_5var)))
 #from the residual plot of the holdoutSet actual data vs predicted values based on training set
 #is approx. random
-#Compare the prediction errors and choose the best model                          
+#Compare the prediction errors and choose the best model: 3 variables with NO2_24h+log(PM10_24h)+log(PM2.5_24h)                      
 
 #predicted valus and actual values based on the best model chosed from requirement 4
 plot(holdoutIndex, holdoutSet$AQI, type = "l")
-lines(holdoutIndex, exp(pred.holdout), type = "l", col = 'red')
+lines(holdoutIndex, exp(pred.holdout_3var), type = "l", col = 'red')
 # END Requirement 5 ( Set training and hold-out set.)
 
 ## Requirment 6 (ls.diag(fit) Cook&dfit)
 #cooks distance / dfits
-diagnostics <- ls.diag(fit6)
+fit6_new<-lm(log(AQI)~NO2_24h+log(PM10_24h)+log(PM2.5_24h), data=X306)
+diagnostics <- ls.diag(fit6_new)
 cookDis <- diagnostics$cooks
 dfits <- diagnostics$dfits
 
