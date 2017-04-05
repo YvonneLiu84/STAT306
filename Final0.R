@@ -48,6 +48,9 @@ cat("Cp and adjr\n")
 print(summ.exh6$cp)
 print(summ.exh6$adjr) #max adjr = 0.4468629
 # Based on Cp and adjR^2, we decide to use the 4 explainatory variable model. Kicked out SO and CO
+#Perform DW test
+dwtest(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = X306)
+#Conclude that the assumption of residuals are independent is valid here based on DW 
 # END Requirement 4 (Use variable selection)
 
 
@@ -62,14 +65,29 @@ holdoutIndex <- sort(sample(1:n, round(n/5), replace = FALSE))
 holdoutSet <- X306[holdoutIndex,]
 trainingSet <- X306[-holdoutIndex,] 
 
-#based on the exhaustive selection; compare Cp and adjR^2, 4 variables is the best model
-model.trainSet <- lm(log(AQI)~ NO2_24h + O3_24h + PM10_24h + PM2.5_24h, data = trainingSet)
-#model.trainSet <- lm(askprice~., data = dat.subset1)
+#based on the exhaustive selection; compare Cp and adjR^2 with 6, 3, 4, 5 variables
+model.trainSet_6var <- lm(log(X306$AQI)~sqrt(X306$CO_24h)+X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
+model.trainSet_3var <- lm(log(X306$AQI)~X306$NO2_24h+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
+model.trainSet_4var <- lm(log(X306$AQI)~X306$NO2_24h+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)
+model.trainSet_5var <- lm((log(X306$AQI)~X306$NO2_24h+newO3+log(X306$SO2_24h)+log(X306$PM10_24h)+log(X306$PM2.5_24h), data = trainingSet)                      
 
-# Make predictions at the hold-out data set.
-pred.holdout <- predict(model.trainSet, holdoutSet)
-holdout.err1 <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout))^2)/length(pred.holdout))
-plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout)))
+
+# Make predictions at the each hold-out data set.
+pred.holdout_6var <- predict(model.trainSet_6var, holdoutSet)
+holdout.err_6var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_6var))^2)/length(pred.holdout_6var))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_6var)))
+                          
+pred.holdout_3var <- predict(model.trainSet_3var, holdoutSet)
+holdout.err_3var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_3var))^2)/length(pred.holdout_3var))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_3var))) 
+                          
+pred.holdout_4var <- predict(model.trainSet_4var, holdoutSet)
+holdout.err_4var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_4var))^2)/length(pred.holdout_4var))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_4var)))
+                          
+pred.holdout_4var <- predict(model.trainSet_4var, holdoutSet)
+holdout.err_4var <- sqrt(sum((holdoutSet$AQI - exp(pred.holdout_4var))^2)/length(pred.holdout_4var))
+plot(holdoutIndex, (holdoutSet$AQI - exp(pred.holdout_4var)))
 #from the residual plot of the holdoutSet actual data vs predicted values based on training set
 #is approx. random
 
