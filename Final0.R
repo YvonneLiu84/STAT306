@@ -2,6 +2,7 @@ setwd("/Users/Joy/Desktop/STAT306_lab9/proj")
 
 library(readxl)
 library(leaps)
+library(lmtest)
 
 X306 <- read_excel("~/Desktop/STAT306_lab9/proj/306.xlsx")
 
